@@ -17,11 +17,11 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
   const handleClose = () => setOpenModal(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // setEquipNum("");
-    // setAddress("");
-    // setContractStart("");
-    // setContractEnd("");
-    // setStatus("Running");
+    setEquipNum("");
+    setAddress("");
+    setContractStart("");
+    setContractEnd("");
+    setStatus("Running");
     try {
       await axios.post(
         "https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment",
@@ -132,7 +132,7 @@ const Table = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const columns = [
-    { title: "Equipment Number", field: "equipNum" },
+    { title: "Equipment Number", field: "equipNum", defaultSort: "asc" },
     { title: "Address", field: "address" },
     { title: "Contract Start Date", field: "contractStart" },
     { title: "COntract End Date", field: "contractEnd" },
