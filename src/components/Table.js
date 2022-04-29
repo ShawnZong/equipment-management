@@ -2,36 +2,81 @@ import React from "react";
 import MaterialTable from "@material-table/core";
 import useAxios from "axios-hooks";
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
-
+import { Button, Modal, Form } from "react-bootstrap";
 
 const ModalForm = ({ openModal, setOpenModal }) => {
   const [equipNum, setEquipNum] = useState("");
   const [address, setAddress] = useState("");
   const [contractStart, setContractStart] = useState("");
   const [contractEnd, setContractEnd] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("Running");
 
   const handleClose = () => setOpenModal(false);
-  const handleReset = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     setEquipNum("");
     setAddress("");
     setContractStart("");
     setContractEnd("");
-    setStatus("");
+    setStatus("Running");
+    console.log(equipNum, address, contractStart, contractEnd, status);
+    console.log(contractEnd > contractStart);
   };
   return (
     <Modal show={openModal} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Modal heading</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit} id="equipmentForm">
+          <Form.Group className="mb-3">
+            <Form.Label>Equipment Number</Form.Label>
+            <Form.Control
+              type="text"
+              value={equipNum}
+              onChange={(event) => setEquipNum(event.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Address</Form.Label>
+            <Form.Control
+              type="text"
+              value={address}
+              onChange={(event) => setAddress(event.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Contract Start Date</Form.Label>
+            <Form.Control
+              type="date"
+              value={contractStart}
+              onChange={(event) => setContractStart(event.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Contract End Date</Form.Label>
+            <Form.Control
+              type="date"
+              value={contractEnd}
+              min={contractStart}
+              onChange={(event) => setContractEnd(event.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Status</Form.Label>
+            <Form.Select
+              value={status}
+              onChange={(event) => setStatus(event.target.value)}
+            >
+              <option value="Running">Running</option>
+              <option value="Stopped">Stopped</option>
+            </Form.Select>
+          </Form.Group>
+        </Form>
+      </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleClose}>
-          Save Changes
+        <Button variant="primary" type="submit" form="equipmentForm">
+          Submit
         </Button>
       </Modal.Footer>
     </Modal>
