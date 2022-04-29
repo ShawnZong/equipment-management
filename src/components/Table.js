@@ -2,7 +2,7 @@ import React from "react";
 import MaterialTable from "@material-table/core";
 import useAxios from "axios-hooks";
 import { useState } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Toast } from "react-bootstrap";
 import axios from "axios";
 
 const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
@@ -11,6 +11,8 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
   const [contractStart, setContractStart] = useState("");
   const [contractEnd, setContractEnd] = useState("");
   const [status, setStatus] = useState("Running");
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
 
   const handleClose = () => setOpenModal(false);
   const handleSubmit = async (event) => {
@@ -33,6 +35,10 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
       );
       await refetchDB();
     } catch (err) {
+      if (err.response.data === "Duplicate data") {
+        setToastMsg("Duplicate record: equipment number must be unique");
+      }
+      setShowToast(true);
       console.log(err);
     }
 
@@ -47,7 +53,7 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
   return (
     <Modal show={openModal} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>Submit a new equipment record</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit} id="equipmentForm">
@@ -101,6 +107,16 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          bg={"danger"}
+        >
+          <Toast.Header>
+            <strong className="me-auto">Error</strong>
+          </Toast.Header>
+          <Toast.Body>{toastMsg}</Toast.Body>
+        </Toast>
         <Button variant="primary" type="submit" form="equipmentForm">
           Submit
         </Button>
@@ -134,7 +150,7 @@ const Table = () => {
       <MaterialTable
         columns={columns}
         data={data}
-        title="Demo Title"
+        title="Equipment records"
         actions={[
           {
             icon: "add",
