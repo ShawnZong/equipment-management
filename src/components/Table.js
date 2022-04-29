@@ -3,8 +3,9 @@ import MaterialTable from "@material-table/core";
 import useAxios from "axios-hooks";
 import { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
+import axios from "axios";
 
-const ModalForm = ({ openModal, setOpenModal }) => {
+const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
   const [equipNum, setEquipNum] = useState("");
   const [address, setAddress] = useState("");
   const [contractStart, setContractStart] = useState("");
@@ -12,15 +13,36 @@ const ModalForm = ({ openModal, setOpenModal }) => {
   const [status, setStatus] = useState("Running");
 
   const handleClose = () => setOpenModal(false);
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setEquipNum("");
     setAddress("");
     setContractStart("");
     setContractEnd("");
     setStatus("Running");
-    console.log(equipNum, address, contractStart, contractEnd, status);
-    console.log(contractEnd > contractStart);
+    try {
+      await axios.post(
+        "https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment",
+        {
+          equipNum,
+          address,
+          contractStart,
+          contractEnd,
+          status,
+        }
+      );
+      await refetchDB();
+    } catch (err) {
+      console.log(err);
+    }
+
+    console.log({
+      equipNum,
+      address,
+      contractStart,
+      contractEnd,
+      status,
+    });
   };
   return (
     <Modal show={openModal} onHide={handleClose}>
@@ -118,7 +140,11 @@ const Table = () => {
           },
         ]}
       />
-      <ModalForm openModal={openModal} setOpenModal={setOpenModal} />
+      <ModalForm
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        refetchDB={refetch}
+      />
     </div>
   );
 };
