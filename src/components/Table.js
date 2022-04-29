@@ -15,11 +15,11 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
   const handleClose = () => setOpenModal(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setEquipNum("");
-    setAddress("");
-    setContractStart("");
-    setContractEnd("");
-    setStatus("Running");
+    // setEquipNum("");
+    // setAddress("");
+    // setContractStart("");
+    // setContractEnd("");
+    // setStatus("Running");
     try {
       await axios.post(
         "https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment",
@@ -55,6 +55,7 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
             <Form.Label>Equipment Number</Form.Label>
             <Form.Control
               type="text"
+              required
               value={equipNum}
               onChange={(event) => setEquipNum(event.target.value)}
             />
@@ -63,6 +64,7 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
             <Form.Label>Address</Form.Label>
             <Form.Control
               type="text"
+              required
               value={address}
               onChange={(event) => setAddress(event.target.value)}
             />
@@ -71,6 +73,7 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
             <Form.Label>Contract Start Date</Form.Label>
             <Form.Control
               type="date"
+              required
               value={contractStart}
               onChange={(event) => setContractStart(event.target.value)}
             />
@@ -79,6 +82,7 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
             <Form.Label>Contract End Date</Form.Label>
             <Form.Control
               type="date"
+              required
               value={contractEnd}
               min={contractStart}
               onChange={(event) => setContractEnd(event.target.value)}
