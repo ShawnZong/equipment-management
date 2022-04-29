@@ -1,22 +1,9 @@
 import React from "react";
 import MaterialTable from "@material-table/core";
 import useAxios from "axios-hooks";
-import { Modal, Box, TextField, Button, Typography } from "@material-ui/core";
 import { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
 
 const ModalForm = ({ openModal, setOpenModal }) => {
   const [equipNum, setEquipNum] = useState("");
@@ -25,6 +12,7 @@ const ModalForm = ({ openModal, setOpenModal }) => {
   const [contractEnd, setContractEnd] = useState("");
   const [status, setStatus] = useState("");
 
+  const handleClose = () => setOpenModal(false);
   const handleReset = () => {
     setEquipNum("");
     setAddress("");
@@ -33,59 +21,19 @@ const ModalForm = ({ openModal, setOpenModal }) => {
     setStatus("");
   };
   return (
-    <Modal
-      open={openModal}
-      onClose={() => setOpenModal(false)}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Submit a new equipment
-        </Typography>
-        <Typography>
-          <TextField
-            onChange={(event) => setEquipNum(event.target.value)}
-            value={equipNum}
-            label={"Equipment Number"}
-          />
-        </Typography>
-        <Typography>
-          <TextField
-            onChange={(event) => setAddress(event.target.value)}
-            value={address}
-            label={"Address"}
-          />
-        </Typography>
-        <Typography>
-          <TextField
-            onChange={(event) => setContractStart(event.target.value)}
-            value={contractStart}
-            label={"Contract Start Date"}
-          />
-        </Typography>
-        <Typography>
-          <TextField
-            onChange={(event) => setContractEnd(event.target.value)}
-            value={contractEnd}
-            label={"Contract End Date"}
-          />
-        </Typography>
-        <Typography>
-          <TextField
-            onChange={(event) => setStatus(event.target.value)}
-            value={status}
-            label={"Status"}
-          />
-        </Typography>
-
-        <Typography>
-          <Button>Submit</Button>
-        </Typography>
-        <Typography>
-          <Button onClick={handleReset}>Reset</Button>
-        </Typography>
-      </Box>
+    <Modal show={openModal} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Modal heading</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleClose}>
+          Save Changes
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };
