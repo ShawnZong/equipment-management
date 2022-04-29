@@ -135,7 +135,7 @@ const Table = () => {
     { title: "Equipment Number", field: "equipNum", defaultSort: "asc" },
     { title: "Address", field: "address" },
     { title: "Contract Start Date", field: "contractStart" },
-    { title: "COntract End Date", field: "contractEnd" },
+    { title: "Contract End Date", field: "contractEnd" },
     { title: "Status", field: "status" },
   ];
 
