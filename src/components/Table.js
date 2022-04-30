@@ -24,16 +24,13 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
     setContractEnd("");
     setStatus("Running");
     try {
-      await axios.post(
-        "https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment",
-        {
-          equipNum,
-          address,
-          contractStart,
-          contractEnd,
-          status,
-        }
-      );
+      await axios.post(`${process.env.REACT_APP_API_URL}/equipment`, {
+        equipNum,
+        address,
+        contractStart,
+        contractEnd,
+        status,
+      });
       await refetchDB();
     } catch (err) {
       if (err.response.data === "Duplicate data") {
@@ -129,21 +126,18 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
 const Table = () => {
   const equipID = useParams().id;
   const searchLimit = new URLSearchParams(useLocation().search).get("limit");
-  let dbURL =
-    "https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment";
+  let dbURL = `${process.env.REACT_APP_API_URL}/equipment`;
   if (equipID) {
-    dbURL = `https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/${equipID}`;
+    dbURL = `${process.env.REACT_APP_API_URL}/equipment/${equipID}`;
   } else if (searchLimit) {
-    dbURL = `https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/search?limit=${searchLimit}`;
+    dbURL = `${process.env.REACT_APP_API_URL}/equipment/search?limit=${searchLimit}`;
   }
 
   const [{ data, loading, error }, refetch] = useAxios(dbURL);
   const [openModal, setOpenModal] = useState(false);
   const handleDelete = async (event, rowData) => {
     try {
-      await axios.delete(
-        `https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/${rowData.equipNum}`
-      );
+      await axios.delete(`${process.env.REACT_APP_API_URL}/equipment/${rowData.equipNum}`);
       refetch();
     } catch (err) {
       console.log(err);
