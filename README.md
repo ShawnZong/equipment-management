@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# Equipment Record Monitor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview 📝
 
-## Available Scripts
+A monitor to show equipment records. One can add, delete and search for a record.
 
-In the project directory, you can run:
+## Technologies👨🏻‍💻
+### Frontend
+* React
+* Axios
+* React-router
+* Material-table
 
-### `npm start`
+### Backend
+* AWS Amplify
+* AWS API Gateway
+* AWS Lambda
+* DynamoDB
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Usage🛠
+The application is located in: https://main.d1z25lidbsa9em.amplifyapp.com/, one can interact with the frontend or directly with the API.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Interact with the API:
+* fetch X equipment records: GET https://main.d1z25lidbsa9em.amplifyapp.com/search?limit=\<X\>
 
-### `npm test`
+e.g.: 
+```bash
+curl -X GET https://main.d1z25lidbsa9em.amplifyapp.com/search?limit=3
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This example will return 3 equipment records.
 
-### `npm run build`
+* Search for a specific equipment record: GET https://main.d1z25lidbsa9em.amplifyapp.com/\<equipment number\>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+e.g.: 
+```bash
+curl -X GET https://main.d1z25lidbsa9em.amplifyapp.com/2
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This example searches for an equipment record whose equipment number is 2.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* Create an equipment record: POST https://main.d1z25lidbsa9em.amplifyapp.com/equipment with equipment record as request payload.
 
-### `npm run eject`
+e.g.:
+```bash
+curl -X POST https://main.d1z25lidbsa9em.amplifyapp.com/equipment -H "Content-Type:application/json" --data '{"equipNum":"1""address":"Espoo","contractStart":"20-03-2022","contractEnd":"25-03-2022","status":"Running"}'
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This example will create a new equipment record and stores it in the database.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Delete a records: DELETE https://main.d1z25lidbsa9em.amplifyapp.com/\<equipment number\>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+e.g.: 
+```bash
+curl -X DELETE https://main.d1z25lidbsa9em.amplifyapp.com/2
+```
 
-## Learn More
+This example deletes equipment records whose equipment number is 2.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Solution💡
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+I adopted **React** to develop the frontend, because with **React**, one can conveniently reuse components, this is suitable for cooperation between developers. I used **material-table** to render the table because it offers various custom actions to configure different operations on row data. I used **react-router** to manage routes and **Axios** as HTTP client. The frontend is hosted in **AWS Amplify**, because it can build and host an extensible full-stack application. Also, it can connect to **Github** and trigger **CI/CD**. Therefore, whenever this git repository has a new commit, it'd trigger a new deployment.
 
-### Code Splitting
+When developing, I configured **Prettier** for maintaining code quality. **Git** for version control. Developers can easily manage environment variables with **.env** file.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+I implemented a serverless backend in **AWS**, the figure below shows the architecture:
 
-### Analyzing the Bundle Size
+![architecture](./architecture.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Equipment records are stored in **DynamoDB**, which is a reliable and serverless NoSQL database. Several **AWS Lambdas** were created to integrate with the database. **AWS Lambdas** is a lightweight serverless compute service, it runs my code in response and manages underlying compute resources for me. Requests are handled by **AWS API Gateway**. It can easily manage APIs and handles tasks, e.g., concurrent API calls, and traffic management.
 
-### Making a Progressive Web App
+source codes for frontend are located in **src** folder, source codes for **lambda** function are located in **AWS_lambda** folder.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Future work📈
+* All the AWS configurations can be specified in **AWS Cloudformation**, it is preferable to the AWS console, because it allows code review before editing infrastructure. We can also build **CI/CD** with **Cloudformation**, so that the pipeline is automated.
+* Different **IAM** roles can be created and assigned to different developers so that we have permission control to decide who can deploy and edit cloud services.
+* **AWS Cognito** can be added to the architecture to implement user authorization and authentication.
+* **Grafana** can be configured to monitor the status of our system, e.g., the volume of request traffic.
+* Utilize **Regex** for more fine-grained input validation.
+* Integrate **GraphQL**. It has a strongly-typed schema to validate data, and it can save bandwidth without over-fetching data.
