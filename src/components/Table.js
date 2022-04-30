@@ -4,7 +4,7 @@ import useAxios from "axios-hooks";
 import { useState } from "react";
 import { Button, Modal, Form, Toast } from "react-bootstrap";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
   const [equipNum, setEquipNum] = useState("");
@@ -128,20 +128,33 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
 
 const Table = () => {
   const equipID = useParams().id;
+  const searchLimit = new URLSearchParams(useLocation().search).get("limit");
   let dbURL =
     "https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment";
   if (equipID) {
     dbURL = `https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/${equipID}`;
+  } else if (searchLimit) {
+    dbURL = `https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/search?limit=${searchLimit}`;
   }
+
   const [{ data, loading, error }, refetch] = useAxios(dbURL);
   const [openModal, setOpenModal] = useState(false);
-
+  const handleDelete = async (event, rowData) => {
+    try {
+      await axios.delete(
+        `https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/${rowData.equipNum}`
+      );
+      refetch();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const columns = [
     { title: "Equipment Number", field: "equipNum", defaultSort: "asc" },
-    { title: "Address", field: "address" },
-    { title: "Contract Start Date", field: "contractStart" },
-    { title: "Contract End Date", field: "contractEnd" },
-    { title: "Status", field: "status" },
+    { title: "Address", field: "address", searchable: false },
+    { title: "Contract Start Date", field: "contractStart", searchable: false },
+    { title: "Contract End Date", field: "contractEnd", searchable: false },
+    { title: "Status", field: "status", searchable: false },
   ];
 
   if (loading) {
@@ -162,6 +175,11 @@ const Table = () => {
             tooltip: "Add User",
             isFreeAction: true,
             onClick: () => setOpenModal(true),
+          },
+          {
+            icon: "delete",
+            tooltip: "Delete Record",
+            onClick: handleDelete,
           },
         ]}
       />
