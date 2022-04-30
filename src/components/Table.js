@@ -4,6 +4,7 @@ import useAxios from "axios-hooks";
 import { useState } from "react";
 import { Button, Modal, Form, Toast } from "react-bootstrap";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
   const [equipNum, setEquipNum] = useState("");
@@ -126,9 +127,13 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
 };
 
 const Table = () => {
-  const [{ data, loading, error }, refetch] = useAxios(
-    "https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment"
-  );
+  const equipID = useParams().id;
+  let dbURL =
+    "https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment";
+  if (equipID) {
+    dbURL = `https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/${equipID}`;
+  }
+  const [{ data, loading, error }, refetch] = useAxios(dbURL);
   const [openModal, setOpenModal] = useState(false);
 
   const columns = [
