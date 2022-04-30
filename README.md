@@ -18,42 +18,42 @@ A monitor to show equipment records. One can add, delete and search for a record
 * DynamoDB
 
 ## Usage🛠
-The application is located in: https://main.d1z25lidbsa9em.amplifyapp.com/, one can interact with the frontend or directly with the API.
+The application is located in: https://main.d1z25lidbsa9em.amplifyapp.com/, one can interact with the frontend or directly with the API: https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod
 
 Interact with the API:
-* fetch X equipment records: GET https://main.d1z25lidbsa9em.amplifyapp.com/search?limit=\<X\>
+* fetch X equipment records: GET https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/search?limit=\<X\>
 
 e.g.: 
 ```bash
-curl -X GET https://main.d1z25lidbsa9em.amplifyapp.com/search?limit=3
+curl -X GET https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/search\?limit\=2
 ```
 
 This example will return 3 equipment records.
 
-* Search for a specific equipment record: GET https://main.d1z25lidbsa9em.amplifyapp.com/\<equipment number\>
+* Search for a specific equipment record: GET https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/\<equipment number\>
 
 e.g.: 
 ```bash
-curl -X GET https://main.d1z25lidbsa9em.amplifyapp.com/2
+curl -X GET https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/2
 ```
 
 This example searches for an equipment record whose equipment number is 2.
 
-* Create an equipment record: POST https://main.d1z25lidbsa9em.amplifyapp.com/equipment with equipment record as request payload.
+* Create an equipment record: POST https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment with equipment record as request payload.
 
 e.g.:
 ```bash
-curl -X POST https://main.d1z25lidbsa9em.amplifyapp.com/equipment -H "Content-Type:application/json" --data '{"equipNum":"1""address":"Espoo","contractStart":"20-03-2022","contractEnd":"25-03-2022","status":"Running"}'
+curl -X POST https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment -H "Content-Type:application/json" --data '{"equipNum":"2","address":"Espoo","contractStart":"2022-03-20","contractEnd":"2022-03-25","status":"Running"}'
 ```
 
 This example will create a new equipment record and stores it in the database.
 
-* Delete a records: DELETE https://main.d1z25lidbsa9em.amplifyapp.com/\<equipment number\>
+* Delete a records: DELETE https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/\<equipment number\>
 
 
 e.g.: 
 ```bash
-curl -X DELETE https://main.d1z25lidbsa9em.amplifyapp.com/2
+curl -X DELETE https://2zqzf5jn07.execute-api.eu-west-1.amazonaws.com/prod/equipment/2
 ```
 
 This example deletes equipment records whose equipment number is 2.
