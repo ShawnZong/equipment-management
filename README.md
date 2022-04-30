@@ -4,6 +4,9 @@
 
 A monitor to show equipment records. One can add, delete and search for a record.
 
+Github page: https://github.com/ShawnZong/equipment-management
+
+The application is hosted in https://main.d1z25lidbsa9em.amplifyapp.com
 ## Technologies👨🏻‍💻
 ### Frontend
 * React
