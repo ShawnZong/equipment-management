@@ -79,6 +79,7 @@ const ModalForm = ({ openModal, setOpenModal, refetchDB }) => {
               type="date"
               required
               value={contractStart}
+              max={contractEnd}
               onChange={(event) => setContractStart(event.target.value)}
             />
           </Form.Group>
@@ -137,7 +138,9 @@ const Table = () => {
   const [openModal, setOpenModal] = useState(false);
   const handleDelete = async (event, rowData) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/equipment/${rowData.equipNum}`);
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/equipment/${rowData.equipNum}`
+      );
       refetch();
     } catch (err) {
       console.log(err);
